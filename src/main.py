@@ -17,3 +17,23 @@ if(resp.status_code == 200):
   print(resp.text)  # HTML 문서를 가져옴
 else:
   print("응답에 실패했습니다.")
+  
+
+soup = BeautifulSoup(resp.text, 'html.parser')
+
+# 뉴스기사 제목 검색
+news_title = soup.select('.section_latest_article .sa_text_strong')
+print(news_title)
+
+news_title_text = []
+
+# 1차 가공 : 뉴스 기사에 제목 텍스트만 추출
+for idx, title in enumerate(news_title):  
+  title_text = title.get_text(strip=True)
+  news_title_text.append(title_text)  
+  
+# 뉴스 기사 제목 출력
+print("== 뉴스 기사 제목 출력 ==")
+for i, title in enumerate(news_title_text):
+  no = i + 1
+  print(f"{no} : {title}")
