@@ -62,9 +62,17 @@ print(find_keyword_list) # 특정 키워드로 걸러진 데이터가 리스트�
 print("== 키워드 뉴스 제목 리스트 순회 ==")
 for i, title in enumerate(find_keyword_list):
   print(f"{i + 1} : {title}")
+  
+# 두 리스트의 길이를 맞춰주기
+max_length = max(len(news_title_text), len(find_keyword_list))
+news_title_text = news_title_text + [None] * (max_length - len(news_title_text))
+find_keyword_list = find_keyword_list + [None] * (max_length - len(find_keyword_list))  
 
 # 엑셀에 데이터를 저장하기 위해서는 딕셔너리가 필수!  
-news_list = {'뉴스 제목' : find_keyword_list}  
+news_list = {
+  '뉴스 제목': news_title_text,
+  '키워드 뉴스 제목' : find_keyword_list
+}  
 
 def save_to_excel(news_list, filename=None):
     # 파일명이 지정되지 않은 경우 현재 날짜로 생성
