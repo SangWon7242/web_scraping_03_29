@@ -2,6 +2,9 @@
 
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+from datetime import datetime
+import openpyxl
 
 
 # GET 요청 (데이터 조회)
@@ -59,3 +62,33 @@ print(find_keyword_list) # 특정 키워드로 걸러진 데이터가 리스트�
 print("== 키워드 뉴스 제목 리스트 순회 ==")
 for i, title in enumerate(find_keyword_list):
   print(f"{i + 1} : {title}")
+
+# 엑셀에 데이터를 저장하기 위해서는 딕셔너리가 필수!  
+news_list = {'뉴스 제목' : find_keyword_list}  
+
+def save_to_excel(news_list, filename=None):
+    # 파일명이 지정되지 않은 경우 현재 날짜로 생성
+    if filename is None:
+      current_date = datetime.now().strftime('%Y%m%d')
+      filename = f'news_data_{current_date}.xlsx'
+    
+    try:
+      # 데이터프레임 생성(추출한 데이터를 엑셀에 저장)
+      df = pd.DataFrame(news_list)
+      
+      save_path = f"C:\work\python_projects\scrap_data\{filename}"
+      
+      # 엑셀 파일로 저장
+      df.to_excel(save_path, index=False, engine='openpyxl')
+      
+      print(f"데이터가 성공적으로 {filename}에 저장되었습니다.")
+      
+      # 기본적인 데이터 통계 출력
+      print("\n데이터 통계:")
+      print(f"총 기사 수: {len(df)}")
+        
+    except Exception as e:
+        print(f"엑셀 저장 중 오류 발생: {e}")  
+
+# 엑셀에 데이터 저장 함수 실행
+save_to_excel(news_list)
